@@ -5,10 +5,18 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        Matrix m= file2Matrix(args[0]);
+        Matrix m= file2Matrix(args[1]);
         if(m.getSize()== -1) throw new IllegalArgumentException(" The matrix is not valid");
+
+
+        m.solve();
+
+
+
+
+
         //Write the results to the target
-        File outPut= new File(args[1]);
+        File outPut= new File(args[3]);
         try(PrintWriter printWriter = new PrintWriter(outPut)){
             for(double result: m.getResults()){
                 printWriter.println(result);
@@ -16,9 +24,6 @@ public class Main {
         }catch (IOException e) {
             System.out.printf("An exception occurs %s", e.getMessage());
         }
-
-
-
     }
 
 
