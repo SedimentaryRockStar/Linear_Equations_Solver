@@ -1,49 +1,49 @@
 package solver;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        Matrix m= file2Matrix(args[1]);
-        if(m.getSize()== -1) throw new IllegalArgumentException(" The matrix is not valid");
-
-
-        m.solve();
-
-
-
-
-
-        //Write the results to the target
-        File outPut= new File(args[3]);
-        try(PrintWriter printWriter = new PrintWriter(outPut)){
-            for(double result: m.getResults()){
-                printWriter.println(result);
+    public static void main(String[] args) throws IOException{
+        try{
+            Matrix m= file2Matrix(args[1]);
+            File out= new File(args[3]);
+            try(FileWriter writer = new FileWriter(out)) {
+                Boolean res = m.solve();
+                if (res == null) {
+                    writer.write("Infinitely many solutions\n");
+                } else if (res) {
+                    for (double result : m.getResults()) {
+                        writer.write(result + "\n");
+                    }
+                } else writer.write("No solutions\n");
+                writer.close();
+            }catch (IOException e){
+                e.printStackTrace();
             }
-        }catch (IOException e) {
-            System.out.printf("An exception occurs %s", e.getMessage());
+        }catch(FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
 
-    public static Matrix file2Matrix(String file) throws Exception{
-        File f = new File(file);
-        try {
-            Scanner in = new Scanner(f);
-            int size= Integer.parseInt(in.nextLine());
+    public static Matrix file2Matrix(String s) throws IOException{
+            File file= new File(s);
+            Scanner in = new Scanner(new FileInputStream(file));
+            String str= in.nextLine();
+            String[] params= str.split(" ");
+            int length= Integer.parseInt(params[0])+ 1;
+            int size=  Integer.parseInt(params[1]);
             double[][] m= new double[size][];
             int i= 0;
             do{
                 m[i]= constructLine(in);
                 i++;
             }while(in.hasNextLine());
-            return new Matrix(size, m);
-        }catch(FileNotFoundException e) {
-            System.out.println("The file is not founded!!!");
-            return new Matrix();
+            return new Matrix(size, length, m);
         }
-    }
 
     public static double[] constructLine(Scanner in ){
         String[] line= in.nextLine().split(" ");
