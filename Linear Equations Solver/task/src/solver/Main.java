@@ -1,4 +1,4 @@
-package solver;
+package javaFundamentals;
 
 import java.io.*;
 import java.util.*;
@@ -7,9 +7,11 @@ public class Main {
 
 
     public static void main(String[] args){
-        File inputFile= new File(args[1]);
-        File outputFile= new File(args[3]);
-        File operationProcess= new File(args[4]);
+        Scanner file= new Scanner(System.in);
+        System.out.println("Please specify your \n >");
+        File inputFile= new File(file.nextLine());
+        File outputFile= new File("out.txt");
+        File operationProcess= new File("output.txt");
         StringBuilder builder= new StringBuilder();
         try ( Scanner in = new Scanner(new FileInputStream(inputFile))){
             Matrix m= file2Matrix(in);
